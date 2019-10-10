@@ -2,7 +2,7 @@ package com.squalle0nhart.t9keyboardvn;
 
 public class CharMap {
     protected static final char[][] ENT9TABLE = {
-            {'0', '+'},
+            {' ', '0', '+'},
             {'.', ',', '?', '!', '"', '/', '-', '@', '$', '%', '&', '*', '#', '(', ')', '_', '1'},
             {'a', 'ă', 'â', 'b', 'c', '2'},
             {'d', 'đ', 'e', 'ê', 'f', '3'},
