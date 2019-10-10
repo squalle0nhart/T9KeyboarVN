@@ -32,6 +32,8 @@ public class MyInputMethodService extends InputMethodService implements Keyboard
     private int mPrevious;
     private int mCharIndex;
 
+    private int currentAccentIndex = 0;
+
     private StringBuilder mComposing = new StringBuilder();
     private StringBuilder mComposingI = new StringBuilder();
 
@@ -156,13 +158,14 @@ public class MyInputMethodService extends InputMethodService implements Keyboard
             if (mKeyMode == MODE_NUM) {
                 handleCharacter(KeyEvent.KEYCODE_STAR);
             } else {
-                if (mCapsMode == CAPS_CYCLE.length - 1) {
-                    mCapsMode = 0;
-                    showStatusIcon(R.drawable.ime_en_text_lower);
-                } else {
-                    mCapsMode++;
-                    showStatusIcon(R.drawable.ime_en_text_upper);
-                }
+//                if (mCapsMode == CAPS_CYCLE.length - 1) {
+//                    mCapsMode = 0;
+//                    showStatusIcon(R.drawable.ime_en_text_lower);
+//                } else {
+//                    mCapsMode++;
+//                    showStatusIcon(R.drawable.ime_en_text_upper);
+//                }
+                handleAccent();
             }
         } else if (keyCode == KeyEvent.KEYCODE_POUND) {
             // space
@@ -209,7 +212,7 @@ public class MyInputMethodService extends InputMethodService implements Keyboard
 
     }
 
-    private  void handleCharacter(int keyCode) {
+    private void handleCharacter(int keyCode) {
         Log.e("" + mKeyMode, "Keycode:" + keyCode);
         switch (mKeyMode) {
             case MODE_TEXT:
@@ -291,6 +294,35 @@ public class MyInputMethodService extends InputMethodService implements Keyboard
                 mCapsMode = CAPS_OFF;
             }
         }
+    }
+
+    private void handleAccent() {
+        CharSequence lastchar = currentInputConnection.getTextAfterCursor(1, 0);
+        int currentAccentIndex = 0;
+        if (lastchar.equals('a')) {
+            currentAccentIndex = 0;
+        } else if (lastchar.equals('â')) {
+            currentAccentIndex = 1;
+        } else if (lastchar.equals('ă')) {
+            currentAccentIndex = 2;
+        } else if (lastchar.equals('e')) {
+            currentAccentIndex = 3;
+        } else if (lastchar.equals('o')) {
+            currentAccentIndex = 4;
+        } else if (lastchar.equals('ơ')) {
+            currentAccentIndex = 5;
+        } else if (lastchar.equals('ô')) {
+            currentAccentIndex = 6;
+        } else if (lastchar.equals('u')) {
+            currentAccentIndex = 7;
+        } else if (lastchar.equals('ư')) {
+            currentAccentIndex = 8;
+        } else if (lastchar.equals('i')) {
+            currentAccentIndex = 9;
+        } else if (lastchar.equals('y')) {
+            currentAccentIndex = 10;
+        }
+
     }
 
     private void commitReset() {

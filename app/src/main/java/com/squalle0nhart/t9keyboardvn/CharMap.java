@@ -16,6 +16,26 @@ public class CharMap {
             {' ', '0', '+'},
             {'\n'}}; // LAST TWO SPACE ON 0
 
+
+    protected static final char[][] ACCENTTABLE = {
+            {'á', 'à', 'ã', 'ả', 'ạ'},
+            {'ấ', 'ầ', 'ẫ', 'ẩ', 'ậ'},
+            {'ắ', 'ằ', 'ẵ', 'ẳ', 'ặ'},
+
+            {'é', 'è', 'ẽ', 'ẻ', 'ẹ'},
+            {'ế', 'ề', 'ễ', 'ể', 'ệ'},
+
+            {'ó', 'ò', 'õ', 'ỏ', 'ọ'},
+            {'ố', 'ồ', 'ỗ', 'ổ', 'ộ'},
+            {'ớ', 'ờ', 'ỡ', 'ở', 'ợ'},
+
+            {'ú', 'ù', 'ũ', 'ủ', 'ụ'},
+            {'ứ', 'ừ', 'ữ', 'ử', 'ự'},
+
+            {'í', 'ì', 'ĩ', 'ỉ', 'ị'},
+            {'ý', 'ỳ', 'ỹ', 'ỳ', 'ỵ'},
+          };
+
     protected static final char[][][] T9TABLE = {ENT9TABLE};
 
     // last 2 don't matter, are for spaceOnZero extra 'slots' 0 position, and 10 position
