@@ -40,7 +40,7 @@ public class MyInputMethodService extends InputMethodService implements Keyboard
     private StringBuilder mComposing = new StringBuilder();
     private StringBuilder mComposingI = new StringBuilder();
 
-    private final static int T9DELAY = 900;
+    private final static int T9DELAY = 1500;
     final Handler t9releasehandler = new Handler();
     Runnable mt9release = new Runnable() {
         @Override
@@ -127,7 +127,6 @@ public class MyInputMethodService extends InputMethodService implements Keyboard
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_DEL || keyCode == 4) {
             CharSequence selectedText = currentInputConnection.getSelectedText(0);
-
             try {
                 CharSequence currentText = currentInputConnection.getExtractedText(new ExtractedTextRequest(), 0).text;
                 if (currentText.length() == 0) {
@@ -141,12 +140,15 @@ public class MyInputMethodService extends InputMethodService implements Keyboard
                 currentInputConnection.deleteSurroundingText(1, 0);
             } else {
                 currentInputConnection.commitText("", 1);
+                t9releasehandler.removeCallbacks(mt9release);
+                mCharIndex = 0;
             }
         } else if (keyCode == KeyEvent.KEYCODE_STAR) {
             // change case
             if (mKeyMode == MODE_NUM) {
                 handleCharacter(KeyEvent.KEYCODE_STAR);
             } else {
+                mCharIndex = 0;
                 handleAccent();
             }
         } else if (keyCode == KeyEvent.KEYCODE_POUND) {
@@ -358,14 +360,18 @@ public class MyInputMethodService extends InputMethodService implements Keyboard
         }
 
         Log.e("t9", "currentIndex: " + currentAccentIndex);
+//        if (currentAccentIndex == -1 && !isAddingAccent) {
+//            if (mCapsMode == CAPS_CYCLE.length - 1) {
+//                mCapsMode = 0;
+//                showStatusIcon(R.drawable.ime_en_text_lower);
+//            } else {
+//                mCapsMode++;
+//                showStatusIcon(R.drawable.ime_en_text_upper);
+//            }
+//            mCharIndex = 0;
+//            return;
+//        }
         if (currentAccentIndex == -1 && !isAddingAccent) {
-            if (mCapsMode == CAPS_CYCLE.length - 1) {
-                mCapsMode = 0;
-                showStatusIcon(R.drawable.ime_en_text_lower);
-            } else {
-                mCapsMode++;
-                showStatusIcon(R.drawable.ime_en_text_upper);
-            }
             return;
         }
         isAddingAccent = true;
@@ -392,7 +398,7 @@ public class MyInputMethodService extends InputMethodService implements Keyboard
                 mCapsMode = CAPS_OFF;
             }
         }
-        t9releasehandler.postDelayed(mt9release, T9DELAY);
+        t9releasehandler.postDelayed(mt9release, 100000);
 
     }
 
