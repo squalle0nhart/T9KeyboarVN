@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Keyboard xmlns:android="http://schemas.android.com/apk/res/android"
+    android:horizontalGap="0px"
+    android:keyWidth="33.33%p"
+    android:keyHeight="@dimen/key_height"
+    android:verticalGap="0px">
+    <Row>
+        <Key android:keyLabel="1 \n .,?" android:codes="8"/>
+        <Key android:keyLabel="2 \n abc" android:codes="9"/>
+        <Key android:keyLabel="3 \n def" android:codes="10"/>
+    </Row>
+    <Row>
+        <Key android:keyLabel="4 \n ghi" android:codes="11"/>
+        <Key android:keyLabel="5 \n jkl" android:codes="12"/>
+        <Key android:keyLabel="6 \n mno" android:codes="13"/>
+    </Row>
+    <Row>
+        <Key android:keyLabel="7 \n pqrs" android:codes="14"/>
+        <Key android:keyLabel="8 \n tuv" android:codes="15"/>
+        <Key android:keyLabel="9 \n wxyz" android:codes="16"/>
+    </Row>
+    <Row>
+        <Key
+            android:keyIcon="@drawable/sym_keyboard_delete"
+            android:codes="17"
+            android:keyLabel="*" />
+        <Key
+            android:keyIcon="@drawable/sym_keyboard_space"
+            android:codes="7"
+            android:keyLabel="0 ␣" />
+        <Key
+            android:keyIcon="@drawable/sym_keyboard_return"
+            android:codes="18"
+            android:keyLabel="#" />
+    </Row>
+</Keyboard>
