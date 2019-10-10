@@ -120,6 +120,9 @@ public class MyInputMethodService extends InputMethodService implements Keyboard
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (mKeyMode == MODE_TEXT) {
+            t9releasehandler.removeCallbacks(mt9release);
+        }
         return true;
     }
 
@@ -140,7 +143,6 @@ public class MyInputMethodService extends InputMethodService implements Keyboard
 
     @Override
     public void onKey(int keyCode, int[] keyCodes) {
-        Log.e("", "keycode: " + keyCode);
         if (keyCode == KeyEvent.KEYCODE_DEL) {
             CharSequence selectedText = currentInputConnection.getSelectedText(0);
 
@@ -222,16 +224,12 @@ public class MyInputMethodService extends InputMethodService implements Keyboard
                 if (mPrevious == keyCode) {
                     mCharIndex++;
                 } else {
-                    //Log.d("handleChar", "COMMITING:" + mComposing.toString());
                     commitTyped();
-                    // updateShiftKeyState(getCurrentInputEditorInfo());
                     newChar = true;
                     mCharIndex = 0;
                     mPrevious = keyCode;
                 }
 
-                // start at caps if CapMode
-                // Log.d("handleChar", "Cm: " + mCapsMode);
                 if (mCharIndex == 0 && mCapsMode != CAPS_OFF) {
                     mCharIndex = CharMap.T9CAPSTART[0][keyCode];
                 }
@@ -242,9 +240,7 @@ public class MyInputMethodService extends InputMethodService implements Keyboard
                 if (mCharIndex >= ca.length) {
                     mCharIndex = 0;
                 }
-                //Log.d("handleChar", "Index: " + mCharIndex);
                 mComposing.append(ca[mCharIndex]);
-                //Log.d("handleChar", "settingCompose: " + mComposing.toString());
                 currentInputConnection.setComposingText(mComposing, 1);
 
                 t9releasehandler.postDelayed(mt9release, T9DELAY);
@@ -254,6 +250,9 @@ public class MyInputMethodService extends InputMethodService implements Keyboard
                         mCapsMode = CAPS_OFF;
                     }
                 }
+
+                updateShiftKeyState(getCurrentInputEditorInfo());
+                break;
 
             case MODE_NUM:
                 if (keyCode == KeyEvent.KEYCODE_POUND) {
@@ -300,9 +299,10 @@ public class MyInputMethodService extends InputMethodService implements Keyboard
         if (mCapsMode == CAPS_SINGLE) {
             mCapsMode = CAPS_OFF;
         }
-        // Log.d("commitReset", "CM pre: " + mCapsMode);
         updateShiftKeyState(getCurrentInputEditorInfo());
-        // Log.d("commitReset", "CM post: " + mCapsMode);
+        if (currentInputConnection != null) {
+            currentInputConnection.finishComposingText();
+        }
     }
 
     private void charReset() {
@@ -313,6 +313,9 @@ public class MyInputMethodService extends InputMethodService implements Keyboard
 
     private void commitTyped() {
         clearState();
+        if (currentInputConnection != null) {
+            currentInputConnection.finishComposingText();
+        }
     }
 
     private void clearState() {
