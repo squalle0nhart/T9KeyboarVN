@@ -40,7 +40,7 @@ public class MyInputMethodService extends InputMethodService implements Keyboard
     private StringBuilder mComposing = new StringBuilder();
     private StringBuilder mComposingI = new StringBuilder();
 
-    private final static int T9DELAY = 1500;
+    private final static int T9DELAY = 1200;
     final Handler t9releasehandler = new Handler();
     Runnable mt9release = new Runnable() {
         @Override
