@@ -417,7 +417,7 @@ public class MyInputMethodService extends InputMethodService implements Keyboard
                 mCapsMode = CAPS_OFF;
             }
         }
-        t9releasehandler.postDelayed(mt9release, 100000);
+        t9releasehandler.postDelayed(mt9release, 1500);
 
     }
 
