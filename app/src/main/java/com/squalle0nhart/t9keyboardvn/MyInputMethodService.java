@@ -47,6 +47,7 @@ public class MyInputMethodService extends InputMethodService implements Keyboard
         public void run() {
             isAddingAccent = false;
             currentAccentIndex = -1;
+            mAccentIndex = -1;
             commitReset();
         }
     };
@@ -59,14 +60,14 @@ public class MyInputMethodService extends InputMethodService implements Keyboard
         super();
     }
 
-//    @Override
-//    public View onCreateInputView() {
-//        keyboardView = (KeyboardView) getLayoutInflater().inflate(R.layout.keyboard_view, null);
-//        keyboard = new Keyboard(this, R.xml.t9);
-//        keyboardView.setKeyboard(keyboard);
-//        keyboardView.setOnKeyboardActionListener(this);
-//        return keyboardView;
-//    }
+    @Override
+    public View onCreateInputView() {
+        keyboardView = (KeyboardView) getLayoutInflater().inflate(R.layout.keyboard_view, null);
+        keyboard = new Keyboard(this, R.xml.t9);
+        keyboardView.setKeyboard(keyboard);
+        keyboardView.setOnKeyboardActionListener(this);
+        return keyboardView;
+    }
 
     @Override
     public void onStartInput(EditorInfo attribute, boolean restarting) {
@@ -96,7 +97,7 @@ public class MyInputMethodService extends InputMethodService implements Keyboard
                 // be doing predictive text (showing candidates as the
                 // user types).
                 mKeyMode = MODE_TEXT;
-
+                currentAccentIndex = -1;
                 // We now look for a few special variations of text that will
                 // modify our behavior.
                 int variation = attribute.inputType & InputType.TYPE_MASK_VARIATION;
@@ -126,6 +127,10 @@ public class MyInputMethodService extends InputMethodService implements Keyboard
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_DEL || keyCode == 4) {
+            Log.e("","composing: " + mComposing.toString());
+            if (mComposing.length() > 0) {
+                commitTyped();
+            }
             CharSequence selectedText = currentInputConnection.getSelectedText(0);
             try {
                 CharSequence currentText = currentInputConnection.getExtractedText(new ExtractedTextRequest(), 0).text;
@@ -158,7 +163,7 @@ public class MyInputMethodService extends InputMethodService implements Keyboard
             if (keyCode >= KeyEvent.KEYCODE_0 && keyCode <= KeyEvent.KEYCODE_9) {
                 handleCharacter(keyCode);
             } else {
-               return false;
+                return false;
             }
         }
         super.onKeyDown(keyCode, event);
@@ -182,20 +187,34 @@ public class MyInputMethodService extends InputMethodService implements Keyboard
 
     @Override
     public void onKey(int keyCode, int[] keyCodes) {
-//        Log.e("keys","onKey" +keyCode);
-//        if (keyCode == KeyEvent.KEYCODE_DEL) {
+//        if (keyCode == KeyEvent.KEYCODE_DEL || keyCode == 4) {
+//            Log.e("","composing: " + mComposing.toString());
+//            if (mComposing.length() > 0) {
+//                commitTyped();
+//            }
 //            CharSequence selectedText = currentInputConnection.getSelectedText(0);
+//            try {
+//                CharSequence currentText = currentInputConnection.getExtractedText(new ExtractedTextRequest(), 0).text;
+//                if (currentText.length() == 0) {
+//                    return;
+//                }
+//            } catch (NullPointerException e) {
+//                return;
+//            }
 //
 //            if (TextUtils.isEmpty(selectedText)) {
 //                currentInputConnection.deleteSurroundingText(1, 0);
 //            } else {
 //                currentInputConnection.commitText("", 1);
+//                t9releasehandler.removeCallbacks(mt9release);
+//                mCharIndex = 0;
 //            }
 //        } else if (keyCode == KeyEvent.KEYCODE_STAR) {
 //            // change case
 //            if (mKeyMode == MODE_NUM) {
 //                handleCharacter(KeyEvent.KEYCODE_STAR);
 //            } else {
+//                mCharIndex = 0;
 //                handleAccent();
 //            }
 //        } else if (keyCode == KeyEvent.KEYCODE_POUND) {
@@ -205,7 +224,7 @@ public class MyInputMethodService extends InputMethodService implements Keyboard
 //            if (keyCode >= KeyEvent.KEYCODE_0 && keyCode <= KeyEvent.KEYCODE_9) {
 //                handleCharacter(keyCode);
 //            } else {
-//                Log.e("onKey", "This shouldn't happen, unknown key");
+//                return;
 //            }
 //        }
     }
@@ -406,7 +425,7 @@ public class MyInputMethodService extends InputMethodService implements Keyboard
         commitTyped();
         charReset();
         mCharIndex = 0;
-        mAccentIndex = 0;
+        mAccentIndex = -1;
         if (mCapsMode == CAPS_SINGLE) {
             mCapsMode = CAPS_OFF;
         }
@@ -420,7 +439,7 @@ public class MyInputMethodService extends InputMethodService implements Keyboard
         t9releasehandler.removeCallbacks(mt9release);
         mPrevious = -1;
         mCharIndex = 0;
-        mAccentIndex = 0;
+        mAccentIndex = -1;
     }
 
     private void commitTyped() {

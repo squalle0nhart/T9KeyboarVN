@@ -32,5 +32,6 @@
             android:keyIcon="@drawable/sym_keyboard_return"
             android:codes="18"
             android:keyLabel="#" />
+        <Key android:keyLabel="del" android:codes="4"/>
     </Row>
 </Keyboard>
