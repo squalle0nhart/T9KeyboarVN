@@ -1,6 +1,6 @@
 # T9KeyboardVN
 
-- App gõ tiếng việt cho mấy em nắp gập chạy android, giúp bạn tránh việc mang tiếng dùng smartphone mà nhắn tin ko có dấu, dễ gây hiểu lầm trong một vài tình huống
+- App gõ tiếng việt cho mấy em nắp gập chạy android, giúp bạn tránh việcnhắn tin ko có dấu, dễ gây hiểu lầm trong một vài tình huống
 
 # Cách dùng: 
 - Khi đang gõ thì dùng phím * để thêm dấu, phím # để cách. 
